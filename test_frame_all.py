@@ -84,9 +84,7 @@ def get_model(args):
 
 def val(args):
 
-    model, optimizer = get_model(args)
-
-    model.eval()
+   
 
     num_classes = 20
     tp_list = [0]*num_classes
@@ -100,9 +98,12 @@ def val(args):
 
     for group in range(4):
         datalayer = SSDatalayer(group)
-        restore(args, model, group)
+        
 
         for count in tqdm(range(1000)):
+            model, optimizer = get_model(args)
+            model.eval()
+            restore(args, model, group)
             dat = datalayer.dequeue()
             ref_img = dat['second_img'][0]
             query_img = dat['first_img'][0]
