@@ -87,11 +87,8 @@ def warper_img(img):
 
 
 def val(args):
-    model, optimizer = get_model(args)
+    
     losses = AverageMeter()
-    #model = get_model(args)
-    model.eval()
-
     num_classes = 20
     tp_list = [0]*num_classes
     fp_list = [0]*num_classes
@@ -106,9 +103,13 @@ def val(args):
 
     for group in range(4):
         datalayer = SSDatalayer(group, k_shot=1)
-        restore(args, model, group)
+        
 
         for count in tqdm(range(1000)):
+            model, optimizer = get_model(args)
+            model.eval()
+            restore(args, model, group)
+            
             dat = datalayer.dequeue()
             s_class_one = dat['first_img'][0]
             s_one_label = dat['first_label'][0]
